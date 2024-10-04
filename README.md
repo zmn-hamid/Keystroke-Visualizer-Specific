@@ -4,7 +4,7 @@ With this app you can see the pressed keys when using specific applications (win
 
 ## Installation
 
-Download the [latest release](releases/latest). It's portable, so just unzip it and double click the exe to run.
+Download the [latest release](https://github.com/zmn-hamid/Keystroke-Visualizer-Specific/releases/latest). It's portable, so just unzip it and double click the exe to run.
 
 #### build via source
 
