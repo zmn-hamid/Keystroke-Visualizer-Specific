@@ -27,15 +27,16 @@ To automatically start your app on windows startup, you can use the built-in "Ta
 
 ## Usage
 
-- Right Click on the tray app and choose `change settings`. Now enter the path to your executable file. for example: `C:/Program Files/.../Photoshop.exe` (tip: you can shit click, `copy as path` and remove the double quotations from the copied text)
-- You can change the position and font of the text as well
-- After making any changes to settings, restart the app and now you'll see visualizer of your keystrokes in the desired application.
+- Right Click on the tray app and choose `Settings`. Now enter the path to your executable file. for example: `C:/Program Files/.../Photoshop.exe` (tip: you can shit click the file and choose `copy as path`. remove the double quotations as well)
+- After making any changes to settings, restart the app from the menu and now you'll see the visualized keystrokes in the desired applications.
 
 #### Notes
 
 - The position would by default be top middle. remove everything (except for excutable's path) and you'll get the default values
-- Change the [icon.ico](icon.ico) file if you don't like it
-- Some parts were used by ChatGPT. If you encounter anything weird, that's why
+- X Position, Y Position, Width and Height are for the box where the visualizer is
+- Hide After is the amount of time (in seconds) that the visualizer shows each key (by default shows for 1 second and disappears)
+- Change the [icon.ico](icon.ico) file if you don't like the thumbnail
+- Some parts were made by ChatGPT. If you encounter anything weird, that's why
 
 ## Copyright
 
