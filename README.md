@@ -1,6 +1,6 @@
 # Keystroke Visualizer for Specific Applications
 
-With this app you can see the pressed keys in one specific application (only for windows). I made this because my pen-tablet doesn't show which button is pressed. You can use it too if you want.
+With this app you can see the pressed keys when using specific applications (only for windows). I made this because my pen-tablet doesn't show which button is pressed. You can use it too if you want.
 
 ## Installation
 
@@ -21,6 +21,8 @@ To automatically start your app on windows startup, you can use the built-in "Ta
 - Use `pythonw` in the `Program/Script` field. for example: `C:\Users\username\AppData\Local\Programs\Python\Python312\pythonw.exe`
 - Type `app.pyw` in the `add argument` field
 - Type the path to the repository's folder in the `start in` field: `c:/path/to/repository`
+**When adding trigger**:
+- Use "at log on", not "at startup"
 
 ## Usage
 
@@ -31,15 +33,12 @@ To automatically start your app on windows startup, you can use the built-in "Ta
 #### Notes
 
 - The position would by default be top middle. remove everything (except for excutable's path) and you'll get the default values
-- Change the icon.ico file if you don't like the thumbnail
+- Change the [icon.ico](icon.ico) file if you don't like it
+- Some parts were used by ChatGPT. If you encounter anything weird, that's why
 
 ## Copyright
 
 Free for personal usage. Credit for Commercial and Non-personal usage
-
-#### Disclaimer
-
-ChatGPT was a huge help to make this. If you encounter any weird thing that's why.
 
 ### Buy Me A Coffee
 

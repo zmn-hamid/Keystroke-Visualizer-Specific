@@ -11,6 +11,7 @@ import subprocess
 from pystray import Icon, Menu, MenuItem
 from PIL import Image
 import threading
+import enum
 
 
 class KeyDisplayApp:
@@ -26,7 +27,7 @@ class KeyDisplayApp:
             text="",
             font=(
                 self.settings.get("font-name", " Segoe UI"),
-                self.settings.get("font-size", 24),
+                self.settings.get("font-size", 18),
             ),
             fg="white",
             bg="black",
@@ -37,25 +38,26 @@ class KeyDisplayApp:
             on_press=self.on_press, on_release=self.on_release
         )
 
-        self.hide_after_id = None  # Variable to store after() ID for hiding
+        self.cancel_after_ids = []  # Variable to store after() IDs
+        self.stacked_keys = []
 
     def get_settings(self):
         # Load configuration from config.json
         with open("config.json", encoding="utf-8") as f:
             self.settings: dict = json.loads(f.read().strip())
 
-        self.target_exe_path = self.settings.get("executable")
-        if not self.target_exe_path:
+        self.target_exe_paths = self.settings.get("executables")
+        if not self.target_exe_paths:
             messagebox.showinfo(
                 "Warning",
-                "Specify the path to your exe file in the settings then restart "
-                "the app. Right click on the tray app too see the menus",
+                "Specify at least one application (path to the exe file) in the settings, then restart "
+                "the app. Right click on the tray icon for more information.",
             )
 
     def configure_window(self):
-        x = self.settings.get("x", self.root.winfo_screenwidth() // 2 - 100)
+        x = self.settings.get("x", self.root.winfo_screenwidth() // 2 - 200)
         y = self.settings.get("y", 5)
-        w = self.settings.get("w", 200)
+        w = self.settings.get("w", 400)
         h = self.settings.get("h", 100)
         self.root.geometry(f"{w}x{h}+{x}+{y}")
         self.root.attributes("-topmost", True)
@@ -75,29 +77,45 @@ class KeyDisplayApp:
         try:
             process = psutil.Process(pid)
             exe_path = process.exe()
-            return os.path.normcase(exe_path) == os.path.normcase(self.target_exe_path)
+            return os.path.normcase(exe_path) in [
+                os.path.normcase(target) for target in self.target_exe_paths
+            ]
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
             return False
 
-    def on_press(self, key):
+    def on_press(self, key: enum.Enum | keyboard.KeyCode):
         if self.is_target_exe_active():
-            if self.hide_after_id:
+            if self.cancel_after_ids:
                 # Cancel any scheduled hide if a key is pressed before the timeout
-                self.root.after_cancel(self.hide_after_id)
+                for _id in self.cancel_after_ids:
+                    self.root.after_cancel(_id)
+                self.cancel_after_ids = []
 
+            keys_to_print = [item for item in self.stacked_keys]
             try:
-                key_text = key.char if hasattr(key, "char") else str(key).split(".")[-1]
+                key_text = str(key.char)
+                self.stacked_keys = []
+                keys_to_print.append(key_text)
             except AttributeError:
-                key_text = str(key)
+                key_text = str(key).split(".")[-1].upper().split("_")[0]
+                if (
+                    key_text in ["CTRL", "SHIFT", "ALT", "CMD"]
+                    and key_text in self.stacked_keys
+                ):
+                    self.stacked_keys = keys_to_print = [key_text]
+                else:
+                    self.stacked_keys.append(key_text)
+                    keys_to_print.append(key_text)
 
-            self.label.config(text=key_text)
+            self.label.config(text="+".join(keys_to_print))
             self.root.update()
 
     def on_release(self, key):
         # Schedule hiding the key after 1 second (1000 milliseconds)
-        self.hide_after_id = self.root.after(
-            self.settings.get("wait", 1) * 1000, self.hide_key_display
+        self.cancel_after_ids.append(
+            self.root.after(self.settings.get("hide", 1) * 1000, self.hide_key_display)
         )
+        self.stacked_keys = []
 
     def hide_key_display(self):
         self.label.config(text="")
@@ -170,7 +188,9 @@ if __name__ == "__main__":
     if not os.path.exists("config.json"):
         with open("config.json", "w", encoding="utf-8") as f:
             f.write(
-                json.dumps({}, indent=4, ensure_ascii=False).encode("utf8").decode()
+                json.dumps({"executables": []}, indent=4, ensure_ascii=False)
+                .encode("utf8")
+                .decode()
             )
 
     key_display_app = KeyDisplayApp()

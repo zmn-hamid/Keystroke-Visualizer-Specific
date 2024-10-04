@@ -32,25 +32,43 @@ def save_config(config, do_log: bool = True):
         messagebox.showerror("Error", f"Error saving config: {e}")
 
 
+# Check if paths contain missing or invalid quotes
+def validate_paths(paths):
+    invalid_paths = [path for path in paths if '"' in path]
+    if invalid_paths:
+        messagebox.showwarning(
+            "Warning",
+            f"remove double quotation from these paths:\n\n" + "\n".join(invalid_paths),
+        )
+        return False
+    return True
+
+
 # Main logic for updating config based on user input
 def update_config():
     changes_made = False
-    executable = executable_entry.get().strip()
+    executables = list(set(executable_entry.get("1.0", tk.END).strip().splitlines()))
     x = x_entry.get().strip()
     y = y_entry.get().strip()
     w = w_entry.get().strip()
     h = h_entry.get().strip()
     font_name = font_name_entry.get().strip()
     font_size = font_size_entry.get().strip()
-    wait_time = wait_time_entry.get().strip()
+    hide_time = hide_time_entry.get().strip()
 
     try:
-        # Handle 'executable' field
-        if executable != config.get("executable", ""):
-            if executable:  # Update if non-empty
-                config["executable"] = executable
-            else:  # Pop if empty
-                config.pop("executable", None)
+        if not executables:
+            messagebox.showwarning(
+                "Warning",
+                f"You shouldn't leave the executables empty. Put at least one exe path",
+            )
+        # Handle 'executables' field
+        elif (
+            executables != config.get("executables", [])
+            and executables
+            and validate_paths(executables)
+        ):  # Update if valid
+            config["executables"] = executables
             changes_made = True
 
         # Handle 'x' field
@@ -101,12 +119,12 @@ def update_config():
                 config.pop("font-size", None)
             changes_made = True
 
-        # Handle 'wait' field
-        if wait_time != str(config.get("wait", "")):
-            if wait_time:  # Update if non-empty
-                config["wait"] = int(wait_time)
+        # Handle 'hide after' field
+        if hide_time != str(config.get("hide", "")):
+            if hide_time:  # Update if non-empty
+                config["hide"] = int(hide_time)
             else:  # Pop if cleared
-                config.pop("wait", None)
+                config.pop("hide", None)
             changes_made = True
 
         if changes_made:
@@ -116,7 +134,7 @@ def update_config():
     except ValueError:
         messagebox.showerror(
             "Error",
-            "Please enter valid numeric values for x, y, width, height, font size, and wait time!",
+            "Please enter valid numeric values for x, y, width, height, font size, and hide time!",
         )
     except KeyError as e:
         messagebox.showerror("Error", f"Error updating config: {e}")
@@ -126,7 +144,7 @@ def update_config():
 
 if __name__ == "__main__":
     if not os.path.exists("config.json"):
-        save_config({}, False)
+        save_config({"executables": []}, False)
 
     # Initialize Tkinter app
     root = tk.Tk()
@@ -144,9 +162,9 @@ if __name__ == "__main__":
     config_label.pack(pady=10, padx=20)
 
     # Create input fields with current config values
-    tk.Label(root, text="Executable Path:").pack(padx=20, anchor="w")
-    executable_entry = tk.Entry(root, width=50)
-    executable_entry.insert(0, config.get("executable", ""))
+    tk.Label(root, text="Executable Paths (one per line):").pack(padx=20, anchor="w")
+    executable_entry = tk.Text(root, width=50, height=5)
+    executable_entry.insert("1.0", "\n".join(config.get("executables", [])))
     executable_entry.pack(pady=5, padx=20)
 
     tk.Label(root, text="X Position:").pack(padx=20, anchor="w")
@@ -179,10 +197,10 @@ if __name__ == "__main__":
     font_size_entry.insert(0, config.get("font-size", ""))
     font_size_entry.pack(pady=5, padx=20)
 
-    tk.Label(root, text="Wait Time (seconds):").pack(padx=20, anchor="w")
-    wait_time_entry = tk.Entry(root, width=50)
-    wait_time_entry.insert(0, config.get("wait", ""))
-    wait_time_entry.pack(pady=5, padx=20)
+    tk.Label(root, text="Hide After (seconds):").pack(padx=20, anchor="w")
+    hide_time_entry = tk.Entry(root, width=50)
+    hide_time_entry.insert(0, config.get("hide", ""))
+    hide_time_entry.pack(pady=5, padx=20)
 
     # Update button
     update_button = tk.Button(root, text="Save Config", command=update_config)
