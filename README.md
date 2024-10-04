@@ -21,6 +21,7 @@ To automatically start your app on windows startup, you can use the built-in "Ta
 - Use `pythonw` in the `Program/Script` field. for example: `C:\Users\username\AppData\Local\Programs\Python\Python312\pythonw.exe`
 - Type `app.pyw` in the `add argument` field
 - Type the path to the repository's folder in the `start in` field: `c:/path/to/repository`
+
 **When adding trigger**:
 - Use "at log on", not "at startup"
 
