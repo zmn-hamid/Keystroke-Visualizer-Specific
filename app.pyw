@@ -97,17 +97,17 @@ class KeyDisplayApp:
                 self.stacked_keys = []
                 keys_to_print.append(key_text)
             except AttributeError:
-                key_text = str(key).split(".")[-1].upper().split("_")[0]
-                if (
-                    key_text in ["CTRL", "SHIFT", "ALT", "CMD"]
-                    and key_text in self.stacked_keys
-                ):
+                key_text = str(key).split(".")[-1].split("_")[0]
+                if key_text.lower() not in ["ctrl", "shift", "alt", "cmd"]:
+                    self.stacked_keys = []
+                    keys_to_print.append(key_text)
+                elif key_text in self.stacked_keys:
                     self.stacked_keys = keys_to_print = [key_text]
                 else:
                     self.stacked_keys.append(key_text)
                     keys_to_print.append(key_text)
 
-            self.label.config(text="+".join(keys_to_print))
+            self.label.config(text="+".join(keys_to_print).upper())
             self.root.update()
 
     def on_release(self, key):
