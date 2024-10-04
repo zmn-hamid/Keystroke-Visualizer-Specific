@@ -1,6 +1,6 @@
 # Keystroke Visualizer for Specific Applications
 
-With this app you can see the pressed keys when using specific applications (only for windows). I made this because my pen-tablet doesn't show which button is pressed. You can use it too if you want.
+With this app you can see the pressed keys when using specific applications (windows only). So for example you can put photoshop's path and whenever you're using photoshop, the visualizer will appear. I made this because my pen-tablet doesn't show which button is pressed. You can use it too if you want.
 
 ## Installation
 
