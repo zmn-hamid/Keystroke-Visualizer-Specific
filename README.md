@@ -4,38 +4,27 @@ With this app you can see the pressed keys when using specific applications (win
 
 ## Installation
 
-1. Install python 3 and add it to path
-2. Download this repository.
-3. Double click on [install-reqs.cmd](install-reqs.cmd) file and wait for it to install everything
-5. Now you can just start the [app.pyw](app.pyw) file by double clicking on it
+Download the latest version from releases section. It's portable, so just double click the exe file and run.
 
-**Note**: You have to specify the path to your executable file. After running the app,
-right click on the tray app's icon and choose "settings" from the menu, make your changes and save,
-then restart the app from the same menu
+#### build via source
 
-### Auto-Start
-
-To automatically start your app on windows startup, you can use the built-in "Task Schedular".
-
-**When adding action**:
-- Use `pythonw` in the `Program/Script` field. for example: `C:\Users\username\AppData\Local\Programs\Python\Python312\pythonw.exe`
-- Type `app.pyw` in the `add argument` field
-- Type the path to the repository's folder in the `start in` field: `c:/path/to/repository`
-
-**When adding trigger**:
-- Use "at log on", not "at startup"
+If you want to use the source code instead, just download this repo and type `python app.py`.
+you can also turn this into a pyw file and add a startup task in `task schedular`
 
 ## Usage
 
-- Right Click on the tray app and choose `Settings`. Now enter the path to your executable file. for example: `C:/Program Files/.../Photoshop.exe` (tip: you can shit click the file and choose `copy as path`. remove the double quotations as well)
-- After making any changes to settings, restart the app from the menu and now you'll see the visualized keystrokes in the desired applications.
+When you start the application the first time, you'll see a warning telling you to to specify at least one application. Right click on the tray icon and click `Settings` then make your changes and `Apply Settings`. That's all, enjoy
+
+#### example path
+
+Example path: `C:/Program Files/.../Photoshop.exe` (tip: you can shit click the file and choose `copy as path`. remove the double quotations as well)
 
 #### Notes
 
-- The position would by default be top middle. remove everything (except for excutable's path) and you'll get the default values
-- X Position, Y Position, Width and Height are for the box where the visualizer is
-- Hide After is the amount of time (in seconds) that the visualizer shows each key (by default shows for 1 second and disappears)
-- Change the [icon.ico](icon.ico) file if you don't like the thumbnail
+- The position would by default be top middle. Remove everything (except for excutable's path) and you'll get the default values
+- `X`, `Y`, `Width` and `Height` are for the bounding box where the visualizer is
+- `Hide After` is the amount of time (in seconds) that the visualizer shows each key (by default shows for 1 second and disappears)
+- Change the [icon.ico](icon.ico) file if you don't like the thumbnail in system tray
 - Some parts were made by ChatGPT. If you encounter anything weird, that's why
 
 ## Copyright
@@ -44,6 +33,6 @@ Free for personal usage. Credit for Commercial and Non-personal usage
 
 ### Buy Me A Coffee
 
-Would Appreciate any donation :3
+Since I'm making this project free and public, any donation is appreciated :3
 - USDT (BEP20): `0xF11206c2234306c55794169C3991f9e8a09063Eb`
 - USDT (ERC20): `0xF11206c2234306c55794169C3991f9e8a09063Eb`
