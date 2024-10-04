@@ -4,7 +4,7 @@ With this app you can see the pressed keys when using specific applications (win
 
 ## Installation
 
-Download the latest version from releases section. It's portable, so just double click the exe file and run.
+Download the [latest release](releases/latest). It's portable, so just unzip it and double click the exe to run.
 
 #### build via source
 
